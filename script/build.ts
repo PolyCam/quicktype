@@ -12,13 +12,6 @@ function mapFile(source: string, destination: string, transform: (content: strin
     fs.writeFileSync(destination, transform(content));
 }
 
-function installPrereqs() {
-    const result = shell.exec("npm install --ignore-scripts");
-    if (result.code !== 0) {
-        process.exit(result.code);
-    }
-}
-
 function buildTypeScript() {
     const result = shell.exec(`tsc --project src/cli`);
     if (result.code !== 0) {
@@ -38,8 +31,6 @@ function makeDistributedCLIExecutable() {
 }
 
 function main() {
-    const skipPrereqs = !!process.env.SKIP_INSTALL_PREREQUISITES;
-
     buildTypeScript();
     makeDistributedCLIExecutable();
 }
