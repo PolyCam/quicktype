@@ -702,7 +702,7 @@ function addTypesInSchema(resolver, typeBuilder, references, attributeProducers)
                             additionalProperties = schema.patternProperties[".*"];
                         }
                         const objectAttributes = TypeAttributes_1.combineTypeAttributes("union", inferredAttributes, combineProducedAttributes(({ forObject }) => forObject));
-                        const order = schema.quicktypePropertyOrder ? schema.quicktypePropertyOrder : [];
+                        const order = schema.propertyOrder ? schema.propertyOrder : [];
                         const orderKey = (propertyName) => {
                             // use the index of the order array
                             const index = order.indexOf(propertyName);
