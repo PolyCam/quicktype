@@ -881,7 +881,14 @@ encoder.dateEncodingStrategy = .formatted(formatter)`);
             this.emitBlock(`func jsonString(encoding: String.Encoding = .utf8) throws -> String?`, () => {
                 this.emitLine("return String(data: try self.jsonData(), encoding: encoding)");
             });
+
+            // Other extensions
+            this.ensureBlankLine();
+            this.emitOtherClassExtension(c, className);
         });
+    }
+
+    protected emitOtherClassExtension(_c: ClassType, _className: Name): void {
     }
 
     private renderEnumDefinition(e: EnumType, enumName: Name): void {
