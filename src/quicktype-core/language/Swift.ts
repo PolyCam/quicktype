@@ -360,13 +360,13 @@ export class SwiftRenderer extends ConvenienceRenderer {
         this.emitCommentLines(lines, "/// ");
     }
 
-    private emitBlock(line: Sourcelike, f: () => void): void {
+    protected emitBlock(line: Sourcelike, f: () => void): void {
         this.emitLine(line, " {");
         this.indent(f);
         this.emitLine("}");
     }
 
-    private emitBlockWithAccess(line: Sourcelike, f: () => void): void {
+    protected emitBlockWithAccess(line: Sourcelike, f: () => void): void {
         this.emitBlock([this.accessLevel, line], f);
     }
 

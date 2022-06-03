@@ -62,8 +62,8 @@ export declare class SwiftRenderer extends ConvenienceRenderer {
     protected makeEnumCaseNamer(): Namer;
     protected isImplicitCycleBreaker(t: Type): boolean;
     protected emitDescriptionBlock(lines: Sourcelike[]): void;
-    private emitBlock;
-    private emitBlockWithAccess;
+    protected emitBlock(line: Sourcelike, f: () => void): void;
+    protected emitBlockWithAccess(line: Sourcelike, f: () => void): void;
     private justTypesCase;
     private readonly lowerNamingFunction;
     protected swiftPropertyType(p: ClassProperty): Sourcelike;
