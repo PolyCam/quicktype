@@ -6,6 +6,19 @@
 
 `quicktype` generates strongly-typed models and serializers from JSON, JSON Schema, TypeScript, and [GraphQL queries](https://blog.quicktype.io/graphql-with-quicktype/), making it a breeze to work with JSON type-safely in many programming languages.
 
+## Polycam Fork README:
+
+Building:
+
+```bash
+npm install
+npm run build
+```
+
+Make sure to push changes, including built `.js` and `.d.ts` files.
+
+## Original README:
+
 - [Try `quicktype` in your browser](https://app.quicktype.io).
 - Read ['A first look at quicktype'](http://blog.quicktype.io/first-look/) for more introduction.
 - If you have any questions, check out the [FAQ](FAQ.md) first.
