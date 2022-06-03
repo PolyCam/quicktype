@@ -85,7 +85,7 @@ export declare class SwiftRenderer extends ConvenienceRenderer {
     private emitNewEncoderDecoder;
     private emitConvenienceInitializersExtension;
     protected emitOtherClassExtension(_c: ClassType, _className: Name): void;
-    private renderEnumDefinition;
+    protected renderEnumDefinition(e: EnumType, enumName: Name): void;
     private renderUnionDefinition;
     private emitTopLevelMapAndArrayConvenienceInitializerExtensions;
     private emitDecodingError;

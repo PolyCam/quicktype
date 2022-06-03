@@ -891,7 +891,7 @@ encoder.dateEncodingStrategy = .formatted(formatter)`);
     protected emitOtherClassExtension(_c: ClassType, _className: Name): void {
     }
 
-    private renderEnumDefinition(e: EnumType, enumName: Name): void {
+    protected renderEnumDefinition(e: EnumType, enumName: Name): void {
         this.startFile(enumName);
 
         this.emitLineOnce("import Foundation");
