@@ -299,8 +299,6 @@ function unicodeEscape(codePoint: number): string {
     return "\\u{" + intToHex(codePoint, 0) + "}";
 }
 
-const stringEscape = utf32ConcatMap(escapeNonPrintableMapper(isPrintable, unicodeEscape));
-
 export class SwiftRenderer extends ConvenienceRenderer {
     private _currentFilename: string | undefined;
     private _needAny: boolean = false;
@@ -313,6 +311,8 @@ export class SwiftRenderer extends ConvenienceRenderer {
     ) {
         super(targetLanguage, renderContext);
     }
+
+    protected stringEscape = utf32ConcatMap(escapeNonPrintableMapper(isPrintable, unicodeEscape));
 
     protected forbiddenNamesForGlobalNamespace(): string[] {
         if (this._options.alamofire) {
@@ -578,7 +578,7 @@ export class SwiftRenderer extends ConvenienceRenderer {
         let group: PropertyGroup = [];
 
         this.forEachClassProperty(c, "none", (name, jsonName) => {
-            const label = stringEscape(jsonName);
+            const label = this.stringEscape(jsonName);
             const redundant = this.sourcelikeToString(name) === label;
 
             if (this._options.dense && redundant) {
@@ -924,7 +924,7 @@ encoder.dateEncodingStrategy = .formatted(formatter)`);
         } else {
             this.emitBlockWithAccess(["enum ", enumName, protocolString], () => {
                 this.forEachEnumCase(e, "none", (name, jsonName) => {
-                    this.emitLine("case ", name, ' = "', stringEscape(jsonName), '"');
+                    this.emitLine("case ", name, ' = "', this.stringEscape(jsonName), '"');
                 });
             });
         }

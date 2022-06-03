@@ -52,6 +52,7 @@ export declare class SwiftRenderer extends ConvenienceRenderer {
     private _needAny;
     private _needNull;
     constructor(targetLanguage: TargetLanguage, renderContext: RenderContext, _options: OptionValues<typeof swiftOptions>);
+    protected stringEscape: (s: string) => string;
     protected forbiddenNamesForGlobalNamespace(): string[];
     protected forbiddenForObjectProperties(_c: ClassType, _classNamed: Name): ForbiddenWordsInfo;
     protected forbiddenForEnumCases(_e: EnumType, _enumName: Name): ForbiddenWordsInfo;

@@ -212,13 +212,13 @@ function swiftNameStyle(prefix, isUpper, original, acronymsStyle = Strings_1.all
 function unicodeEscape(codePoint) {
     return "\\u{" + Strings_1.intToHex(codePoint, 0) + "}";
 }
-const stringEscape = Strings_1.utf32ConcatMap(Strings_1.escapeNonPrintableMapper(Strings_1.isPrintable, unicodeEscape));
 class SwiftRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
     constructor(targetLanguage, renderContext, _options) {
         super(targetLanguage, renderContext);
         this._options = _options;
         this._needAny = false;
         this._needNull = false;
+        this.stringEscape = Strings_1.utf32ConcatMap(Strings_1.escapeNonPrintableMapper(Strings_1.isPrintable, unicodeEscape));
         this.emitSupportFunctions4 = () => {
             this.startFile("JSONSchemaSupport");
             this.emitLineOnce("import Foundation");
@@ -706,7 +706,7 @@ class SwiftRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
         let groups = [];
         let group = [];
         this.forEachClassProperty(c, "none", (name, jsonName) => {
-            const label = stringEscape(jsonName);
+            const label = this.stringEscape(jsonName);
             const redundant = this.sourcelikeToString(name) === label;
             if (this._options.dense && redundant) {
                 group.push({ name });
@@ -1016,7 +1016,7 @@ encoder.dateEncodingStrategy = .formatted(formatter)`);
         else {
             this.emitBlockWithAccess(["enum ", enumName, protocolString], () => {
                 this.forEachEnumCase(e, "none", (name, jsonName) => {
-                    this.emitLine("case ", name, ' = "', stringEscape(jsonName), '"');
+                    this.emitLine("case ", name, ' = "', this.stringEscape(jsonName), '"');
                 });
             });
         }
