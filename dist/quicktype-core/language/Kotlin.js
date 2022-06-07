@@ -11,6 +11,7 @@ const Support_1 = require("../support/Support");
 const TargetLanguage_1 = require("../TargetLanguage");
 const Type_1 = require("../Type");
 const TypeUtils_1 = require("../TypeUtils");
+const Acronyms_1 = require("../support/Acronyms");
 var Framework;
 (function (Framework) {
     Framework[Framework["None"] = 0] = "None";
@@ -20,6 +21,7 @@ var Framework;
 })(Framework = exports.Framework || (exports.Framework = {}));
 exports.kotlinOptions = {
     framework: new RendererOptions_1.EnumOption("framework", "Serialization framework", [["just-types", Framework.None], ["jackson", Framework.Jackson], ["klaxon", Framework.Klaxon], ["kotlinx", Framework.KotlinX]], "klaxon"),
+    acronymStyle: Acronyms_1.acronymOption(Acronyms_1.AcronymStyleOptions.Pascal),
     packageName: new RendererOptions_1.StringOption("package", "Package", "PACKAGE", "quicktype")
 };
 class KotlinTargetLanguage extends TargetLanguage_1.TargetLanguage {
@@ -27,7 +29,11 @@ class KotlinTargetLanguage extends TargetLanguage_1.TargetLanguage {
         super("Kotlin", ["kotlin"], "kt");
     }
     getOptions() {
-        return [exports.kotlinOptions.framework, exports.kotlinOptions.packageName];
+        return [
+            exports.kotlinOptions.framework,
+            exports.kotlinOptions.packageName,
+            exports.kotlinOptions.acronymStyle,
+        ];
     }
     get supportsOptionalClassProperties() {
         return true;
@@ -110,10 +116,6 @@ function isStartCharacter(codePoint) {
     return isPartCharacter(codePoint) && !Strings_1.isDigit(codePoint);
 }
 const legalizeName = Strings_1.legalizeCharacters(isPartCharacter);
-function kotlinNameStyle(isUpper, original) {
-    const words = Strings_1.splitIntoWords(original);
-    return Strings_1.combineWords(words, legalizeName, isUpper ? Strings_1.firstUpperWordStyle : Strings_1.allLowerWordStyle, Strings_1.firstUpperWordStyle, isUpper ? Strings_1.allUpperWordStyle : Strings_1.allLowerWordStyle, Strings_1.allUpperWordStyle, "", isStartCharacter);
-}
 function unicodeEscape(codePoint) {
     return "\\u" + Strings_1.intToHex(codePoint, 4);
 }
@@ -122,12 +124,16 @@ function stringEscape(s) {
     // "$this" is a template string in Kotlin so we have to escape $
     return _stringEscape(s).replace(/\$/g, "\\$");
 }
-const upperNamingFunction = Naming_1.funPrefixNamer("upper", s => kotlinNameStyle(true, s));
-const lowerNamingFunction = Naming_1.funPrefixNamer("lower", s => kotlinNameStyle(false, s));
 class KotlinRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
     constructor(targetLanguage, renderContext, _kotlinOptions) {
         super(targetLanguage, renderContext);
         this._kotlinOptions = _kotlinOptions;
+        this.upperNamingFunction = Naming_1.funPrefixNamer("upper", s => this.kotlinNameStyle(true, s));
+        this.lowerNamingFunction = Naming_1.funPrefixNamer("lower", s => this.kotlinNameStyle(false, s));
+    }
+    kotlinNameStyle(isUpper, original) {
+        const words = Strings_1.splitIntoWords(original);
+        return Strings_1.combineWords(words, legalizeName, isUpper ? Strings_1.firstUpperWordStyle : Strings_1.allLowerWordStyle, Strings_1.firstUpperWordStyle, isUpper ? Strings_1.allUpperWordStyle : Strings_1.allLowerWordStyle, Acronyms_1.acronymStyle(this._kotlinOptions.acronymStyle), "", isStartCharacter);
     }
     forbiddenNamesForGlobalNamespace() {
         return keywords;
@@ -142,19 +148,19 @@ class KotlinRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
         return { names: [], includeGlobalForbidden: false };
     }
     topLevelNameStyle(rawName) {
-        return kotlinNameStyle(true, rawName);
+        return this.kotlinNameStyle(true, rawName);
     }
     makeNamedTypeNamer() {
-        return upperNamingFunction;
+        return this.upperNamingFunction;
     }
     namerForObjectProperty() {
-        return lowerNamingFunction;
+        return this.lowerNamingFunction;
     }
     makeUnionMemberNamer() {
-        return Naming_1.funPrefixNamer("upper", s => kotlinNameStyle(true, s) + "Value");
+        return Naming_1.funPrefixNamer("upper", s => this.kotlinNameStyle(true, s) + "Value");
     }
     makeEnumCaseNamer() {
-        return upperNamingFunction;
+        return this.upperNamingFunction;
     }
     emitDescriptionBlock(lines) {
         this.emitCommentLines(lines, " * ", "/**", " */");

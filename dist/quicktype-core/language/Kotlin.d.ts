@@ -5,6 +5,7 @@ import { Sourcelike } from "../Source";
 import { TargetLanguage } from "../TargetLanguage";
 import { ArrayType, ClassType, EnumType, MapType, ObjectType, PrimitiveType, Type, UnionType } from "../Type";
 import { RenderContext } from "../Renderer";
+import { AcronymStyleOptions } from "../support/Acronyms";
 export declare enum Framework {
     None = 0,
     Jackson = 1,
@@ -13,6 +14,7 @@ export declare enum Framework {
 }
 export declare const kotlinOptions: {
     framework: EnumOption<Framework>;
+    acronymStyle: EnumOption<AcronymStyleOptions>;
     packageName: StringOption;
 };
 export declare class KotlinTargetLanguage extends TargetLanguage {
@@ -27,6 +29,9 @@ export declare class KotlinTargetLanguage extends TargetLanguage {
 export declare class KotlinRenderer extends ConvenienceRenderer {
     protected readonly _kotlinOptions: OptionValues<typeof kotlinOptions>;
     constructor(targetLanguage: TargetLanguage, renderContext: RenderContext, _kotlinOptions: OptionValues<typeof kotlinOptions>);
+    private kotlinNameStyle;
+    protected upperNamingFunction: Namer;
+    protected lowerNamingFunction: Namer;
     protected forbiddenNamesForGlobalNamespace(): string[];
     protected forbiddenForObjectProperties(_o: ObjectType, _classNamed: Name): ForbiddenWordsInfo;
     protected forbiddenForEnumCases(_e: EnumType, _enumName: Name): ForbiddenWordsInfo;
