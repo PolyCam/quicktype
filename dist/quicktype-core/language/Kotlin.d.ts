@@ -48,6 +48,7 @@ export declare class KotlinRenderer extends ConvenienceRenderer {
     protected emitTopLevelMap(t: MapType, name: Name): void;
     protected emitEmptyClassDefinition(c: ClassType, className: Name): void;
     protected emitClassDefinition(c: ClassType, className: Name): void;
+    protected shouldOverrideProperty(_jsonName: string): boolean;
     protected emitClassDefinitionMethods(_c: ClassType, _className: Name): void;
     protected emitClassAnnotations(_c: Type, _className: Name): void;
     protected renameAttribute(_name: Name, _jsonName: string, _required: boolean, _meta: Array<() => void>): void;

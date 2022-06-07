@@ -251,7 +251,8 @@ class KotlinRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
                 for (const emit of meta) {
                     emit();
                 }
-                this.emitLine("val ", name, ": ", kotlinType(p), nullableOrOptional ? " = null" : "", last ? "" : ",");
+                const override = this.shouldOverrideProperty(jsonName) ? 'override ' : '';
+                this.emitLine(override, "val ", name, ": ", kotlinType(p), nullableOrOptional ? " = null" : "", last ? "" : ",");
                 if (meta.length > 0 && !last) {
                     this.ensureBlankLine();
                 }
@@ -259,6 +260,9 @@ class KotlinRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
             });
         });
         this.emitClassDefinitionMethods(c, className);
+    }
+    shouldOverrideProperty(_jsonName) {
+        return false;
     }
     emitClassDefinitionMethods(_c, _className) {
         this.emitLine(")");

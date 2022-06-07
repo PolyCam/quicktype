@@ -351,7 +351,9 @@ export class KotlinRenderer extends ConvenienceRenderer {
                     emit();
                 }
 
-                this.emitLine("val ", name, ": ", kotlinType(p), nullableOrOptional ? " = null" : "", last ? "" : ",");
+                const override = this.shouldOverrideProperty(jsonName) ? 'override ' : '';
+
+                this.emitLine(override, "val ", name, ": ", kotlinType(p), nullableOrOptional ? " = null" : "", last ? "" : ",");
 
                 if (meta.length > 0 && !last) {
                     this.ensureBlankLine();
@@ -362,6 +364,10 @@ export class KotlinRenderer extends ConvenienceRenderer {
         });
 
         this.emitClassDefinitionMethods(c, className);
+    }
+
+    protected shouldOverrideProperty(_jsonName: string): boolean {
+        return false;
     }
 
     protected emitClassDefinitionMethods(_c: ClassType, _className: Name) {
