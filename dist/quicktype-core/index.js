@@ -147,6 +147,7 @@ exports.swiftOptions = Swift_1.swiftOptions;
 var Kotlin_1 = require("./language/Kotlin");
 exports.KotlinTargetLanguage = Kotlin_1.KotlinTargetLanguage;
 exports.KotlinRenderer = Kotlin_1.KotlinRenderer;
+exports.KotlinXRenderer = Kotlin_1.KotlinXRenderer;
 exports.kotlinOptions = Kotlin_1.kotlinOptions;
 var Elm_1 = require("./language/Elm");
 exports.ElmTargetLanguage = Elm_1.ElmTargetLanguage;

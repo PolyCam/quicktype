@@ -37,7 +37,7 @@ export { JavaScriptTargetLanguage, JavaScriptRenderer, javaScriptOptions } from 
 export { JavaScriptPropTypesTargetLanguage, JavaScriptPropTypesRenderer, javaScriptPropTypesOptions } from "./language/JavaScriptPropTypes";
 export { TypeScriptTargetLanguage, TypeScriptRenderer, FlowTargetLanguage, FlowRenderer, tsFlowOptions } from "./language/TypeScriptFlow";
 export { SwiftTargetLanguage, SwiftRenderer, swiftOptions } from "./language/Swift";
-export { KotlinTargetLanguage, KotlinRenderer, kotlinOptions } from "./language/Kotlin";
+export { KotlinTargetLanguage, KotlinRenderer, KotlinXRenderer, kotlinOptions } from "./language/Kotlin";
 export { ElmTargetLanguage, ElmRenderer, elmOptions } from "./language/Elm";
 export { JSONSchemaTargetLanguage, JSONSchemaRenderer } from "./language/JSONSchema";
 export { RustTargetLanguage, RustRenderer, rustOptions } from "./language/Rust";
