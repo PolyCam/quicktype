@@ -29,6 +29,7 @@ export declare class KotlinTargetLanguage extends TargetLanguage {
 export declare class KotlinRenderer extends ConvenienceRenderer {
     protected readonly _kotlinOptions: OptionValues<typeof kotlinOptions>;
     constructor(targetLanguage: TargetLanguage, renderContext: RenderContext, _kotlinOptions: OptionValues<typeof kotlinOptions>);
+    protected stringEscape(s: string): string;
     private kotlinNameStyle;
     protected upperNamingFunction: Namer;
     protected lowerNamingFunction: Namer;

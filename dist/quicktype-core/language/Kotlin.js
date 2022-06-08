@@ -122,16 +122,16 @@ function unicodeEscape(codePoint) {
     return "\\u" + Strings_1.intToHex(codePoint, 4);
 }
 const _stringEscape = Strings_1.utf32ConcatMap(Strings_1.escapeNonPrintableMapper(Strings_1.isPrintable, unicodeEscape));
-function stringEscape(s) {
-    // "$this" is a template string in Kotlin so we have to escape $
-    return _stringEscape(s).replace(/\$/g, "\\$");
-}
 class KotlinRenderer extends ConvenienceRenderer_1.ConvenienceRenderer {
     constructor(targetLanguage, renderContext, _kotlinOptions) {
         super(targetLanguage, renderContext);
         this._kotlinOptions = _kotlinOptions;
         this.upperNamingFunction = Naming_1.funPrefixNamer("upper", s => this.kotlinNameStyle(true, s));
         this.lowerNamingFunction = Naming_1.funPrefixNamer("lower", s => this.kotlinNameStyle(false, s));
+    }
+    stringEscape(s) {
+        // "$this" is a template string in Kotlin so we have to escape $
+        return _stringEscape(s).replace(/\$/g, "\\$");
     }
     kotlinNameStyle(isUpper, original) {
         const words = Strings_1.splitIntoWords(original);
@@ -418,7 +418,7 @@ class KotlinKlaxonRenderer extends KotlinRenderer {
         });
     }
     klaxonRenameAttribute(propName, jsonName, ignore = false) {
-        const escapedName = stringEscape(jsonName);
+        const escapedName = this.stringEscape(jsonName);
         const namesDiffer = this.sourcelikeToString(propName) !== escapedName;
         const properties = [];
         if (namesDiffer) {
@@ -459,14 +459,14 @@ class KotlinKlaxonRenderer extends KotlinRenderer {
         this.emitBlock(["enum class ", enumName, "(val value: String)"], () => {
             let count = e.cases.size;
             this.forEachEnumCase(e, "none", (name, json) => {
-                this.emitLine(name, `("${stringEscape(json)}")`, --count === 0 ? ";" : ",");
+                this.emitLine(name, `("${this.stringEscape(json)}")`, --count === 0 ? ";" : ",");
             });
             this.ensureBlankLine();
             this.emitBlock("companion object", () => {
                 this.emitBlock(["public fun fromValue(value: String): ", enumName, " = when (value)"], () => {
                     let table = [];
                     this.forEachEnumCase(e, "none", (name, json) => {
-                        table.push([[`"${stringEscape(json)}"`], [" -> ", name]]);
+                        table.push([[`"${this.stringEscape(json)}"`], [" -> ", name]]);
                     });
                     table.push([["else"], [" -> throw IllegalArgumentException()"]]);
                     this.emitTable(table);
@@ -624,7 +624,7 @@ import com.fasterxml.jackson.module.kotlin.*`);
         });
     }
     jacksonRenameAttribute(propName, jsonName, required, ignore = false) {
-        const escapedName = stringEscape(jsonName);
+        const escapedName = this.stringEscape(jsonName);
         const namesDiffer = this.sourcelikeToString(propName) !== escapedName;
         const properties = [];
         const isPrefixBool = jsonName.startsWith("is"); // https://github.com/FasterXML/jackson-module-kotlin/issues/80
@@ -675,14 +675,14 @@ import com.fasterxml.jackson.module.kotlin.*`);
         this.emitBlock(["enum class ", enumName, "(val value: String)"], () => {
             let count = e.cases.size;
             this.forEachEnumCase(e, "none", (name, json) => {
-                this.emitLine(name, `("${stringEscape(json)}")`, --count === 0 ? ";" : ",");
+                this.emitLine(name, `("${this.stringEscape(json)}")`, --count === 0 ? ";" : ",");
             });
             this.ensureBlankLine();
             this.emitBlock("companion object", () => {
                 this.emitBlock(["fun fromValue(value: String): ", enumName, " = when (value)"], () => {
                     let table = [];
                     this.forEachEnumCase(e, "none", (name, json) => {
-                        table.push([[`"${stringEscape(json)}"`], [" -> ", name]]);
+                        table.push([[`"${this.stringEscape(json)}"`], [" -> ", name]]);
                     });
                     table.push([["else"], [" -> throw IllegalArgumentException()"]]);
                     this.emitTable(table);
@@ -805,7 +805,7 @@ class KotlinXRenderer extends KotlinRenderer {
         }
     }
     _rename(propName, jsonName) {
-        const escapedName = stringEscape(jsonName);
+        const escapedName = this.stringEscape(jsonName);
         const namesDiffer = this.sourcelikeToString(propName) !== escapedName;
         if (namesDiffer) {
             return ["@SerialName(\"", escapedName, "\")"];
@@ -818,7 +818,7 @@ class KotlinXRenderer extends KotlinRenderer {
         this.emitBlock(["enum class ", enumName, "(val value: String)"], () => {
             let count = e.cases.size;
             this.forEachEnumCase(e, "none", (name, json) => {
-                this.emitLine(name, `("${stringEscape(json)}")`, --count === 0 ? ";" : ",");
+                this.emitLine(name, `("${this.stringEscape(json)}")`, --count === 0 ? ";" : ",");
             });
             this.ensureBlankLine();
             this.emitBlock(["companion object : KSerializer<", enumName, ">"], () => {
@@ -828,7 +828,7 @@ class KotlinXRenderer extends KotlinRenderer {
                 this.emitBlock(["override fun deserialize(decoder: Decoder): ", enumName, " = when (val value = decoder.decodeString())"], () => {
                     let table = [];
                     this.forEachEnumCase(e, "none", (name, json) => {
-                        table.push([[`"${stringEscape(json)}"`], [" -> ", name]]);
+                        table.push([[`"${this.stringEscape(json)}"`], [" -> ", name]]);
                     });
                     table.push([["else"], [" -> throw IllegalArgumentException(\"", enumName, " could not parse: $value\")"]]);
                     this.emitTable(table);

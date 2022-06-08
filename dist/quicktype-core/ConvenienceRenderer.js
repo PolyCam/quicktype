@@ -490,8 +490,7 @@ class ConvenienceRenderer extends Renderer_1.Renderer {
     }
     forEachEnumCase(e, blankLocations, f) {
         const caseNames = Support_1.defined(this._caseNamesStoreView).get(e);
-        const sortedCaseNames = collection_utils_1.mapSortBy(caseNames, n => Support_1.defined(this.names.get(n)));
-        this.forEachWithBlankLines(sortedCaseNames, blankLocations, f);
+        this.forEachWithBlankLines(caseNames, blankLocations, f);
     }
     forEachTransformation(blankLocations, f) {
         this.forEachWithBlankLines(Support_1.defined(this._namesForTransformations), blankLocations, f);
