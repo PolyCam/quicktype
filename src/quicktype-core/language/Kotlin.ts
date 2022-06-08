@@ -127,6 +127,8 @@ const keywords = [
     "when",
     "interface",
     "typeof",
+    "public",
+    "private",
     "klaxon",
     "toJson",
     "Any",
