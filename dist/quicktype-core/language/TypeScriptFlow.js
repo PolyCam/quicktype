@@ -74,6 +74,7 @@ class TypeScriptFlowBaseRenderer extends JavaScript_1.JavaScriptRenderer {
     constructor(targetLanguage, renderContext, _tsFlowOptions) {
         super(targetLanguage, renderContext, _tsFlowOptions);
         this._tsFlowOptions = _tsFlowOptions;
+        this.utf16StringEscape = Strings_1.utf16StringEscape;
     }
     namerForObjectProperty() {
         if (this._tsFlowOptions.nicePropertyNames) {

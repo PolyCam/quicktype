@@ -98,6 +98,8 @@ export abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
         super(targetLanguage, renderContext, _tsFlowOptions);
     }
 
+    protected utf16StringEscape = utf16StringEscape;
+
     protected namerForObjectProperty(): Namer {
         if (this._tsFlowOptions.nicePropertyNames) {
             return funPrefixNamer("properties", s => this.nameStyle(s, false));

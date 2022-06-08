@@ -33,6 +33,7 @@ export declare class TypeScriptTargetLanguage extends TypeScriptFlowBaseTargetLa
 export declare abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
     protected readonly _tsFlowOptions: OptionValues<typeof tsFlowOptions>;
     constructor(targetLanguage: TargetLanguage, renderContext: RenderContext, _tsFlowOptions: OptionValues<typeof tsFlowOptions>);
+    protected utf16StringEscape: (s: string) => string;
     protected namerForObjectProperty(): Namer;
     protected sourceFor(t: Type): MultiWord;
     protected sourceForEnum(e: EnumType): MultiWord;
