@@ -107,7 +107,7 @@ export abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
     }
 
     protected sourceFor(t: Type): MultiWord {
-        if (["class", "object", "enum"].indexOf(t.kind) >= 0) {
+        if (["class", "object"].indexOf(t.kind) >= 0) {
             return singleWord(this.nameForNamedType(t));
         }
         return matchType<MultiWord>(
@@ -131,7 +131,7 @@ export abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
             },
             _classType => panic("We handled this above"),
             mapType => singleWord(["{ [key: string]: ", this.sourceFor(mapType.values).source, " }"]),
-            _enumType => panic("We handled this above"),
+            enumType => this.sourceForEnum(enumType),
             unionType => {
                 if (!this._tsFlowOptions.declareUnions || nullableFromUnion(unionType) !== null) {
                     const children = Array.from(unionType.getChildren()).map(c => parenIfNeeded(this.sourceFor(c)));
@@ -147,6 +147,10 @@ export abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
                 return singleWord("string");
             }
         );
+    }
+
+    protected sourceForEnum(e: EnumType): MultiWord {
+        return singleWord(this.nameForNamedType(e));
     }
 
     protected abstract emitEnum(e: EnumType, enumName: Name): void;

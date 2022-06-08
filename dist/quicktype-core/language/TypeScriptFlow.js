@@ -84,7 +84,7 @@ class TypeScriptFlowBaseRenderer extends JavaScript_1.JavaScriptRenderer {
         }
     }
     sourceFor(t) {
-        if (["class", "object", "enum"].indexOf(t.kind) >= 0) {
+        if (["class", "object"].indexOf(t.kind) >= 0) {
             return Source_1.singleWord(this.nameForNamedType(t));
         }
         return TypeUtils_1.matchType(t, _anyType => Source_1.singleWord("any"), _nullType => Source_1.singleWord("null"), _boolType => Source_1.singleWord("boolean"), _integerType => Source_1.singleWord("number"), _doubleType => Source_1.singleWord("number"), _stringType => Source_1.singleWord("string"), arrayType => {
@@ -96,7 +96,7 @@ class TypeScriptFlowBaseRenderer extends JavaScript_1.JavaScriptRenderer {
             else {
                 return Source_1.singleWord([Source_1.parenIfNeeded(itemType), "[]"]);
             }
-        }, _classType => Support_1.panic("We handled this above"), mapType => Source_1.singleWord(["{ [key: string]: ", this.sourceFor(mapType.values).source, " }"]), _enumType => Support_1.panic("We handled this above"), unionType => {
+        }, _classType => Support_1.panic("We handled this above"), mapType => Source_1.singleWord(["{ [key: string]: ", this.sourceFor(mapType.values).source, " }"]), enumType => this.sourceForEnum(enumType), unionType => {
             if (!this._tsFlowOptions.declareUnions || TypeUtils_1.nullableFromUnion(unionType) !== null) {
                 const children = Array.from(unionType.getChildren()).map(c => Source_1.parenIfNeeded(this.sourceFor(c)));
                 return Source_1.multiWord(" | ", ...children);
@@ -110,6 +110,9 @@ class TypeScriptFlowBaseRenderer extends JavaScript_1.JavaScriptRenderer {
             }
             return Source_1.singleWord("string");
         });
+    }
+    sourceForEnum(e) {
+        return Source_1.singleWord(this.nameForNamedType(e));
     }
     emitClassBlockBody(c) {
         this.emitPropertyTable(c, (name, _jsonName, p) => {

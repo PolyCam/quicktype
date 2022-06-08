@@ -35,6 +35,7 @@ export declare abstract class TypeScriptFlowBaseRenderer extends JavaScriptRende
     constructor(targetLanguage: TargetLanguage, renderContext: RenderContext, _tsFlowOptions: OptionValues<typeof tsFlowOptions>);
     protected namerForObjectProperty(): Namer;
     protected sourceFor(t: Type): MultiWord;
+    protected sourceForEnum(e: EnumType): MultiWord;
     protected abstract emitEnum(e: EnumType, enumName: Name): void;
     protected abstract emitClassBlock(c: ClassType, className: Name): void;
     protected emitClassBlockBody(c: ClassType): void;
