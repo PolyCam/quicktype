@@ -21,7 +21,8 @@ export const tsFlowOptions = Object.assign({}, javaScriptOptions, {
     justTypes: new BooleanOption("just-types", "Interfaces only", false),
     nicePropertyNames: new BooleanOption("nice-property-names", "Transform property names to be JavaScripty", false),
     declareUnions: new BooleanOption("explicit-unions", "Explicitly name unions", false),
-    preferUnions: new BooleanOption("prefer-unions", "Use union type instead of enum", false)
+    preferUnions: new BooleanOption("prefer-unions", "Use union type instead of enum", false),
+    readonlyProperties: new BooleanOption("readonly-properties", "Set readonly on class properties", false)
 });
 
 const tsFlowTypeAnnotations = {
@@ -44,7 +45,8 @@ export abstract class TypeScriptFlowBaseTargetLanguage extends JavaScriptTargetL
             tsFlowOptions.acronymStyle,
             tsFlowOptions.converters,
             tsFlowOptions.rawType,
-            tsFlowOptions.preferUnions
+            tsFlowOptions.preferUnions,
+            tsFlowOptions.readonlyProperties
         ];
     }
 
@@ -163,7 +165,7 @@ export abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
         this.emitPropertyTable(c, (name, _jsonName, p) => {
             const t = p.type;
             return [
-                [modifySource(quotePropertyName, name), p.isOptional ? "?" : "", ": "],
+                [this._tsFlowOptions.readonlyProperties ? "readonly " : "", modifySource(quotePropertyName, name), p.isOptional ? "?" : "", ": "],
                 [this.sourceFor(t).source, ";"]
             ];
         });

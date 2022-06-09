@@ -13,7 +13,8 @@ exports.tsFlowOptions = Object.assign({}, JavaScript_1.javaScriptOptions, {
     justTypes: new RendererOptions_1.BooleanOption("just-types", "Interfaces only", false),
     nicePropertyNames: new RendererOptions_1.BooleanOption("nice-property-names", "Transform property names to be JavaScripty", false),
     declareUnions: new RendererOptions_1.BooleanOption("explicit-unions", "Explicitly name unions", false),
-    preferUnions: new RendererOptions_1.BooleanOption("prefer-unions", "Use union type instead of enum", false)
+    preferUnions: new RendererOptions_1.BooleanOption("prefer-unions", "Use union type instead of enum", false),
+    readonlyProperties: new RendererOptions_1.BooleanOption("readonly-properties", "Set readonly on class properties", false)
 });
 const tsFlowTypeAnnotations = {
     any: ": any",
@@ -34,7 +35,8 @@ class TypeScriptFlowBaseTargetLanguage extends JavaScript_1.JavaScriptTargetLang
             exports.tsFlowOptions.acronymStyle,
             exports.tsFlowOptions.converters,
             exports.tsFlowOptions.rawType,
-            exports.tsFlowOptions.preferUnions
+            exports.tsFlowOptions.preferUnions,
+            exports.tsFlowOptions.readonlyProperties
         ];
     }
     get supportsOptionalClassProperties() {
@@ -119,7 +121,7 @@ class TypeScriptFlowBaseRenderer extends JavaScript_1.JavaScriptRenderer {
         this.emitPropertyTable(c, (name, _jsonName, p) => {
             const t = p.type;
             return [
-                [Source_1.modifySource(quotePropertyName, name), p.isOptional ? "?" : "", ": "],
+                [this._tsFlowOptions.readonlyProperties ? "readonly " : "", Source_1.modifySource(quotePropertyName, name), p.isOptional ? "?" : "", ": "],
                 [this.sourceFor(t).source, ";"]
             ];
         });

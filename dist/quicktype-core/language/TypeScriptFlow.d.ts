@@ -16,6 +16,7 @@ export declare const tsFlowOptions: {
     nicePropertyNames: BooleanOption;
     declareUnions: BooleanOption;
     preferUnions: BooleanOption;
+    readonlyProperties: BooleanOption;
 };
 export declare abstract class TypeScriptFlowBaseTargetLanguage extends JavaScriptTargetLanguage {
     protected getOptions(): Option<any>[];
